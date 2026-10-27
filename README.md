@@ -1,11 +1,19 @@
-# caddy-rolling-deployment
+# caddy-rolling-deploy
 
 A [Caddy](https://caddyserver.com) implementation of a **rolling deployment strategy** for Docker containers: a webhook updates a named container to a new image, one host at a time, preserving the container's existing configuration.
 
-- **Module ID:** `http.handlers.rolling_deployment`
-- **Caddyfile directive:** `rolling_deployment`
-- **Go module:** `github.com/multionlabs/caddy-rolling-deployment`
-- **Caddy docs:** [http.handlers.rolling_deployment](https://caddyserver.com/docs/modules/http.handlers.rolling_deployment)
+- **Module ID:** `http.handlers.rolling_deploy`
+- **Caddyfile directive:** `rolling_deploy`
+- **Go module:** `github.com/multionlabs/caddy-rolling-deploy`
+- **Caddy docs:** [http.handlers.rolling_deploy](https://caddyserver.com/docs/modules/http.handlers.rolling_deploy)
+
+> **Name change.** This module was previously `http.handlers.rolling_deployment` (`rolling_deployment` / `caddy-rolling-deployment`). It was renamed because the previous module ID could not be re-claimed on the [Caddy package directory](https://caddy.community/t/cant-claim-package-bb551bbb-3cb6-49ac-b703-6f204073ad15-multionlabs-caddy-rolling-deployment/33835) after a repo move. If you followed earlier docs, update:
+>
+> | | Old | New |
+> |--|-----|-----|
+> | Module ID / directive | `rolling_deployment` | `rolling_deploy` |
+> | Go module / repo | `…/caddy-rolling-deployment` | `…/caddy-rolling-deploy` |
+> | Webhook path | `/webhooks/rolling-deployment/…` | `/webhooks/rolling-deploy/…` |
 
 ## What it does
 
@@ -21,28 +29,28 @@ Preserved from the previous container (when present): command/entrypoint, env, l
 
 ```bash
 xcaddy build \
-  --with github.com/multionlabs/caddy-rolling-deployment
+  --with github.com/multionlabs/caddy-rolling-deploy
 ```
 
 Pin a version:
 
 ```bash
 xcaddy build \
-  --with github.com/multionlabs/caddy-rolling-deployment@v0.9.0
+  --with github.com/multionlabs/caddy-rolling-deploy@v0.9.1
 ```
 
 Local checkout:
 
 ```bash
 xcaddy build \
-  --with github.com/multionlabs/caddy-rolling-deployment=.
+  --with github.com/multionlabs/caddy-rolling-deploy=.
 ```
 
 ## Sample Caddyfile
 
 ```caddyfile
 deploy.example.com {
-	rolling_deployment {
+	rolling_deploy {
 		secret {$ROLLING_DEPLOY_SECRET}
 		docker_hosts unix:///var/run/docker.sock
 		# docker_hosts tcp://host-a:2375 tcp://host-b:2375
@@ -60,7 +68,7 @@ Directive order is registered in code (`before respond`).
 ## Webhook
 
 ```text
-POST|GET /webhooks/rolling-deployment/{secret}/{service_container}/{service_image}
+POST|GET /webhooks/rolling-deploy/{secret}/{service_container}/{service_image}
 ```
 
 - `service_container` — exact Docker container **name** (must already be running on at least one configured host).
@@ -70,7 +78,7 @@ Example (typically called by a CI/CD job after publishing an image):
 
 ```bash
 curl -si \
-  "https://deploy.example.com/webhooks/rolling-deployment/${ROLLING_DEPLOY_SECRET}/api/ghcr.io/acme/api:1.2.3"
+  "https://deploy.example.com/webhooks/rolling-deploy/${ROLLING_DEPLOY_SECRET}/api/ghcr.io/acme/api:1.2.3"
 ```
 
 ### Response
@@ -124,8 +132,8 @@ Integration scenarios (requires Docker + a test Caddy from `tests/with-caddy/run
 ## Release
 
 ```bash
-git tag v0.9.0
-git push origin v0.9.0
+git tag v0.9.1
+git push origin v0.9.1
 ```
 
 ## License

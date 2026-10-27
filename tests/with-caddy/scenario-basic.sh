@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Basic rolling deploy: alpine:3.19 -> alpine:3.20, verify image swap.
+# Basic rolling deployment: alpine:3.19 -> alpine:3.20, verify image swap.
 set -euo pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -17,7 +17,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-log "scenario: basic rolling deploy (${FROM_IMAGE} -> ${TO_IMAGE})"
+log "scenario: basic rolling deployment (${FROM_IMAGE} -> ${TO_IMAGE})"
 cleanup_container
 
 log "starting ${CONTAINER_NAME} from ${FROM_IMAGE}"
@@ -32,4 +32,4 @@ assert_eq "$(container_image)" "$TO_IMAGE" "image after deploy"
 container_running || die "${CONTAINER_NAME} is not running after deploy"
 show_container
 
-pass "basic rolling deploy scenario succeeded"
+pass "basic rolling deployment scenario succeeded"

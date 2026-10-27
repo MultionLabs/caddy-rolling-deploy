@@ -1,4 +1,4 @@
-package rolling_deployment
+package rolling_deploy
 
 import (
 	"crypto/subtle"
@@ -12,12 +12,12 @@ import (
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
 	"github.com/caddyserver/caddy/v2/caddyconfig/httpcaddyfile"
 	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
-	"github.com/multionlabs/caddy-rolling-deployment/deploy"
-	"github.com/multionlabs/caddy-rolling-deployment/docker"
+	"github.com/multionlabs/caddy-rolling-deploy/deploy"
+	"github.com/multionlabs/caddy-rolling-deploy/docker"
 	"go.uber.org/zap"
 )
 
-const webhookPrefix = "/webhooks/rolling-deployment/"
+const webhookPrefix = "/webhooks/rolling-deploy/"
 
 // Middleware is an HTTP handler that implements a rolling deployment strategy
 // for Docker containers. It exposes a deploy webhook and leaves all other
@@ -31,7 +31,7 @@ const webhookPrefix = "/webhooks/rolling-deployment/"
 //
 // ```
 // deploy.example.com {
-//     rolling_deployment {
+//     rolling_deploy {
 //         secret {$ROLLING_DEPLOY_SECRET}
 //         docker_hosts unix:///var/run/docker.sock tcp://docker-b.internal:2375
 //     }
@@ -46,12 +46,12 @@ const webhookPrefix = "/webhooks/rolling-deployment/"
 //
 // ```
 // curl -si \
-//   "https://deploy.example.com/webhooks/rolling-deployment/${ROLLING_DEPLOY_SECRET}/api/ghcr.io/acme/api:1.2.3"
+//   "https://deploy.example.com/webhooks/rolling-deploy/${ROLLING_DEPLOY_SECRET}/api/ghcr.io/acme/api:1.2.3"
 // ```
 //
 // Path shape:
 //
-// `/webhooks/rolling-deployment/{secret}/{container}/{image}`
+// `/webhooks/rolling-deploy/{secret}/{container}/{image}`
 //
 // - `{secret}` must match the configured `secret` (constant-time compared).
 // - `{container}` is the exact Docker **container name** that must already be
@@ -106,20 +106,20 @@ var (
 // CaddyModule returns the Caddy module information.
 func (Middleware) CaddyModule() caddy.ModuleInfo {
 	return caddy.ModuleInfo{
-		ID:  "http.handlers.rolling_deployment",
+		ID:  "http.handlers.rolling_deploy",
 		New: func() caddy.Module { return new(Middleware) },
 	}
 }
 
 func init() {
 	caddy.RegisterModule(Middleware{})
-	httpcaddyfile.RegisterHandlerDirective("rolling_deployment", parseCaddyfile)
-	httpcaddyfile.RegisterDirectiveOrder("rolling_deployment", httpcaddyfile.Before, "respond")
+	httpcaddyfile.RegisterHandlerDirective("rolling_deploy", parseCaddyfile)
+	httpcaddyfile.RegisterDirectiveOrder("rolling_deploy", httpcaddyfile.Before, "respond")
 }
 
 // ServeHTTP implements caddyhttp.MiddlewareHandler.
 //
-// Only /webhooks/rolling-deployment/{secret}/{service_container}/{service_image}
+// Only /webhooks/rolling-deploy/{secret}/{service_container}/{service_image}
 // is handled here (terminal). All other requests are passed to the next handler.
 func (m Middleware) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyhttp.Handler) error {
 	if !strings.HasPrefix(r.URL.Path, webhookPrefix) {
@@ -128,7 +128,7 @@ func (m Middleware) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddy
 
 	secret, container, image, ok := parseDeployPath(r.URL.Path)
 	if !ok {
-		return caddyhttp.Error(http.StatusBadRequest, errors.New("invalid path; expected /webhooks/rolling-deployment/{secret}/{service_container}/{service_image}"))
+		return caddyhttp.Error(http.StatusBadRequest, errors.New("invalid path; expected /webhooks/rolling-deploy/{secret}/{service_container}/{service_image}"))
 	}
 
 	if subtle.ConstantTimeCompare([]byte(secret), []byte(m.Secret)) != 1 {
@@ -199,7 +199,7 @@ func writeDeployResult(w http.ResponseWriter, status int, res deploy.Result) err
 }
 
 // parseDeployPath extracts secret, container, and image from
-// /webhooks/rolling-deployment/{secret}/{service_container}/{service_image}.
+// /webhooks/rolling-deploy/{secret}/{service_container}/{service_image}.
 // service_image may contain slashes (e.g. ghcr.io/org/app:tag).
 func parseDeployPath(path string) (secret, container, image string, ok bool) {
 	if !strings.HasPrefix(path, webhookPrefix) {

@@ -1,4 +1,4 @@
-package rolling_deployment
+package rolling_deploy
 
 import (
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"

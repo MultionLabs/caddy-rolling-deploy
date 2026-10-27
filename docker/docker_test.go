@@ -25,7 +25,7 @@ func Test_BasicDockerOperations(t *testing.T) {
 		t.Logf("pulled image: %v", image)
 	}
 
-	const name = "rolling-deployment-list-test"
+	const name = "rolling-deploy-list-test"
 	id, err := c.Run(ctx, &ContainerSpec{
 		Name: name,
 		Config: &container.Config{

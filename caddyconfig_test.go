@@ -1,4 +1,4 @@
-package rolling_deployment
+package rolling_deploy
 
 import (
 	"testing"
@@ -6,8 +6,8 @@ import (
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
 )
 
-func TestRollingDeployment_UnmarshalValidCaddyfile(t *testing.T) {
-	config := `rolling_deployment {
+func TestRollingDeploy_UnmarshalValidCaddyfile(t *testing.T) {
+	config := `rolling_deploy {
 		secret "test-secret"
 		docker_hosts unix:///var/run/docker.sock unix:///var/run/docker.sock2
 	}`

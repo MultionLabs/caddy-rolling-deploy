@@ -8,7 +8,7 @@ import (
 
 	"github.com/moby/moby/api/types/mount"
 	"github.com/moby/moby/api/types/network"
-	"github.com/multionlabs/caddy-rolling-deployment/docker"
+	"github.com/multionlabs/caddy-rolling-deploy/docker"
 	"go.uber.org/zap"
 )
 

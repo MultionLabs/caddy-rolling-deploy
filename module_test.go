@@ -1,4 +1,4 @@
-package rolling_deployment
+package rolling_deploy
 
 import "testing"
 
@@ -13,7 +13,7 @@ func TestParseDeployPath(t *testing.T) {
 	}{
 		{
 			name:      "simple",
-			path:      "/webhooks/rolling-deployment/s3cret/my-app/alpine:latest",
+			path:      "/webhooks/rolling-deploy/s3cret/my-app/alpine:latest",
 			secret:    "s3cret",
 			container: "my-app",
 			image:     "alpine:latest",
@@ -21,7 +21,7 @@ func TestParseDeployPath(t *testing.T) {
 		},
 		{
 			name:      "image with registry path",
-			path:      "/webhooks/rolling-deployment/s3cret/my-app/ghcr.io/org/app:1.2.3",
+			path:      "/webhooks/rolling-deploy/s3cret/my-app/ghcr.io/org/app:1.2.3",
 			secret:    "s3cret",
 			container: "my-app",
 			image:     "ghcr.io/org/app:1.2.3",
@@ -34,17 +34,17 @@ func TestParseDeployPath(t *testing.T) {
 		},
 		{
 			name: "missing image",
-			path: "/webhooks/rolling-deployment/s3cret/my-app",
+			path: "/webhooks/rolling-deploy/s3cret/my-app",
 			ok:   false,
 		},
 		{
 			name: "missing container and image",
-			path: "/webhooks/rolling-deployment/s3cret",
+			path: "/webhooks/rolling-deploy/s3cret",
 			ok:   false,
 		},
 		{
 			name: "empty after prefix",
-			path: "/webhooks/rolling-deployment/",
+			path: "/webhooks/rolling-deploy/",
 			ok:   false,
 		},
 	}

@@ -4,10 +4,10 @@
 }
 
 :8080 {
-	rolling_deployment {
+	rolling_deploy {
 		secret {$ROLLING_DEPLOY_SECRET:test-secret}
 		docker_hosts {$DOCKER_HOST}
 	}
 
-	respond "rolling_deployment test caddy is up" 200
+	respond "rolling_deploy test caddy is up" 200
 }

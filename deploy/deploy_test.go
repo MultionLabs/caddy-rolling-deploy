@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/moby/moby/api/types/container"
-	"github.com/multionlabs/caddy-rolling-deployment/docker"
+	"github.com/multionlabs/caddy-rolling-deploy/docker"
 )
 
 // fakeClient records the operations invoked on it and can be told to fail at a

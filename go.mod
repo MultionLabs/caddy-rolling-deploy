@@ -1,4 +1,4 @@
-module github.com/multionlabs/caddy-rolling-deployment
+module github.com/multionlabs/caddy-rolling-deploy
 
 go 1.26.4
 

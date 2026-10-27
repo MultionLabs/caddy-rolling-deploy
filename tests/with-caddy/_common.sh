@@ -9,7 +9,7 @@ SCENARIO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PORT="${PORT:-8080}"
 SECRET="${ROLLING_DEPLOY_SECRET:-test-secret}"
 BASE_URL="${BASE_URL:-http://127.0.0.1:${PORT}}"
-WEBHOOK_PREFIX="${BASE_URL}/webhooks/rolling-deployment/${SECRET}"
+WEBHOOK_PREFIX="${BASE_URL}/webhooks/rolling-deploy/${SECRET}"
 
 PREFIX="rolling-caddy-test"
 CONTAINER_NAME="${CONTAINER_NAME:-${PREFIX}-svc}"
@@ -37,7 +37,7 @@ require_cmds() {
 require_caddy() {
 	local body
 	body="$(curl -sf "${BASE_URL}/" 2>/dev/null || true)"
-	if [[ "$body" != *rolling_deployment* ]]; then
+	if [[ "$body" != *rolling_deploy* ]]; then
 		die "test Caddy is not reachable at ${BASE_URL}/ — start it with: ${SCENARIO_DIR}/run.sh"
 	fi
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build a Caddy binary with the local rolling_deployment plugin and run a test instance.
+# Build a Caddy binary with the local rolling_deploy plugin and run a test instance.
 set -euo pipefail
 
 LOCAL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
