@@ -1,6 +1,12 @@
 # caddy-rolling-deploy
 
-**1. Enable in your Caddyfile**
+**1. Build Caddy with the plugin**
+
+```bash
+xcaddy build --with github.com/multionlabs/caddy-rolling-deploy
+```
+
+**2. Enable in your Caddyfile**
 
 ```caddyfile
 deploy.example.com {
@@ -12,7 +18,7 @@ deploy.example.com {
 }
 ```
 
-**2. Trigger a rolling deploy** (e.g. from CI after pushing an image)
+**3. Trigger a rolling deploy** (e.g. from CI after pushing an image)
 
 ```bash
 curl -si \
